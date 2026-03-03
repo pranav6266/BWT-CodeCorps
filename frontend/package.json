@@ -13,6 +13,16 @@
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.125.4",
+    "@clerk/clerk-react": "^5.61.3",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@types/three": "^0.183.1",
+    "axios": "^1.13.6",
+    "framer-motion": "^12.34.5",
+    "lucide-react": "^0.576.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.1",
     "three": "^0.183.2"
   }
 }
