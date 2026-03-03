@@ -13,11 +13,16 @@ export const useApi = (getToken) => {
     });
 
     return {
+        // Profile Routes - strict match with backend
+        getProfile: () => api.get('/profile'),
+        updateProfile: (data) => api.post('/profile', data),
+
         // Expense Routes
         getExpenses: () => api.get('/expenses'),
         addExpense: (data) => api.post('/expenses', data),
+        deleteExpense: (id) => api.delete(`/expenses/${id}`),
 
-        // Decision Routes (The core logic)
+        // Decision Routes
         evaluateDecision: (decisionData) => api.post('/evaluate-decision', decisionData),
 
         // Chat Routes

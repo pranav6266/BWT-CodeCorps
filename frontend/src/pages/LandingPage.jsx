@@ -83,4 +83,4 @@ const FeatureCard = ({ icon, title, desc }) => (
     </div>
 );
 
-export default {Landing};
+export default Landing;

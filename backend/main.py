@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from database import ping_server
-from routes import expenses, decision, chat
+from routes import expenses, decision, chat, profile
 
 
 # Import routers once you create them in the 'routes' folder
@@ -37,7 +37,8 @@ app.add_middleware(
 # Placeholder for routing (endpoints mapping to expenses, decisions, and chat)
 app.include_router(expenses.router, prefix="/expenses", tags=["Expenses"])
 app.include_router(decision.router, tags=["Decisions"])
-app.include_router(chat.router, tags=["AI Chat"])
+app.include_router(chat.router, prefix="/chat", tags=["AI Chat"])
+app.include_router(profile.router, prefix="/profile", tags=["Profile"])
 
 @app.get("/")
 async def root():

@@ -20,7 +20,7 @@ const Chat = () => {
 
         try {
             const res = await api.sendMessage(input);
-            setMessages(prev => [...prev, { role: 'ai', content: res.data.response }]);
+            setMessages(prev => [...prev, { role: 'ai', content: res.data.reply }]);
         } catch (err) {
             setMessages(prev => [...prev, { role: 'ai', content: 'Sorry, I’m having trouble connecting to the metrics engine.' }]);
         }
@@ -53,4 +53,4 @@ const Chat = () => {
         </div>
     );
 };
-export default {Chat};
+export default Chat;

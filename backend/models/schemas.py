@@ -13,5 +13,10 @@ class DecisionRequest(BaseModel):
     duration_months: Optional[int] = None
     description: Optional[str] = None
 
+class UserProfile(BaseModel):
+    monthly_income: float = Field(..., description="User's total monthly income")
+    current_debt: float = Field(..., description="User's current total monthly debt obligations")
+    savings_rate: float = Field(..., description="Percentage of income saved monthly")
+    
 class ChatRequest(BaseModel):
     message: str
