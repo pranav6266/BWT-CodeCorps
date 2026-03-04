@@ -4,28 +4,36 @@ from typing import Optional
 
 
 class ExpenseCreate(BaseModel):
-    amount: float
-    category: str
+    amount: float = Field(..., gt=0, description="Expense amount (must be positive)")
+    category: str = Field(..., min_length=1, description="Expense category")
     title: Optional[str] = None
     description: Optional[str] = None
 
 
 class DecisionRequest(BaseModel):
     decision_type: str = Field(
-        ..., description="e.g., New EMI, Vehicle Loan, Medical Emergency"
+        ..., min_length=1, description="e.g., New EMI, Vehicle Loan, Medical Emergency"
     )
-    amount: float
-    duration_months: Optional[int] = None
+    amount: float = Field(..., gt=0, description="Decision amount (must be positive)")
+    duration_months: Optional[int] = Field(
+        None, gt=0, description="Duration in months (must be positive if provided)"
+    )
     description: Optional[str] = None
 
 
 class UserProfile(BaseModel):
-    monthly_income: float = Field(..., description="User's total monthly income")
-    current_debt: float = Field(
-        ..., description="User's current total monthly debt obligations"
+    monthly_income: float = Field(
+        ..., gt=0, description="User's total monthly income (must be positive)"
     )
-    savings_rate: float = Field(..., description="Percentage of income saved monthly")
+    current_debt: float = Field(
+        ...,
+        ge=0,
+        description="User's current total monthly debt obligations (must be non-negative)",
+    )
+    savings_rate: float = Field(
+        ..., ge=0, le=100, description="Percentage of income saved monthly (0-100)"
+    )
 
 
 class ChatRequest(BaseModel):
-    message: str
+    message: str = Field(..., min_length=1, max_length=5000, description="Chat message")

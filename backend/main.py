@@ -1,48 +1,43 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from database import ping_server
+from database import ping_server, create_indexes
 from routes import expenses, decision, chat, profile
 
 
-# Import routers once you create them in the 'routes' folder
-# from routes import expenses, decision, chat
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Ping the database
     print("Starting up FastAPI server...")
     await ping_server()
+    await create_indexes()
     yield
-    # Shutdown logic (if any)
     print("Shutting down FastAPI server...")
 
-# Initialize FastAPI application
+
 app = FastAPI(
     title="AI-Powered Financial Safety & Decision Assistant",
     description="Backend API for tracking expenses and evaluating financial decisions.",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
-# Configure CORS for frontend communication
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins. For production, restrict this to your frontend URL.
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, DELETE, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Placeholder for routing (endpoints mapping to expenses, decisions, and chat)
 app.include_router(expenses.router, prefix="/expenses", tags=["Expenses"])
 app.include_router(decision.router, tags=["Decisions"])
 app.include_router(chat.router, prefix="/chat", tags=["AI Chat"])
 app.include_router(profile.router, prefix="/profile", tags=["Profile"])
 
+
 @app.get("/")
 async def root():
     return {
         "message": "Welcome to the Financial Assistant API.",
-        "status": "Server is running successfully."
+        "status": "Server is running successfully.",
     }

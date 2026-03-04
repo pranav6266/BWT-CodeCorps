@@ -10,9 +10,7 @@ router = APIRouter()
 @router.get("", description="Get the user's financial profile")
 async def get_profile(user_id: str = Depends(get_current_user)):
     try:
-        print(f"[Profile GET] Fetching profile for user_id: {user_id}")
         user = await users_collection.find_one({"user_id": user_id})
-        print(f"[Profile GET] Found user in DB: {user is not None}")
 
         if not user:
             return {"monthlyIncome": "", "currentEmi": "", "targetSavingsRate": ""}
@@ -24,9 +22,7 @@ async def get_profile(user_id: str = Depends(get_current_user)):
         }
     except Exception as e:
         print(f"Error fetching profile: {e}")
-        raise HTTPException(
-            status_code=500, detail="Internal server error while fetching profile"
-        )
+        raise HTTPException(status_code=500, detail="Failed to retrieve profile")
 
 
 @router.post("", description="Update the user's financial profile")
@@ -34,9 +30,6 @@ async def update_profile(
     profile: UserProfile, user_id: str = Depends(get_current_user)
 ):
     try:
-        print(f"[Profile POST] Saving profile for user_id: {user_id}")
-        print(f"[Profile POST] Profile data: {profile.model_dump()}")
-
         profile_data = {
             "monthly_income": profile.monthly_income,
             "current_debt": profile.current_debt,
@@ -49,7 +42,6 @@ async def update_profile(
         result = await users_collection.update_one(
             {"user_id": user_id}, {"$set": profile_data}, upsert=True
         )
-        print(f"[Profile POST] Upsert result: {result.acknowledged}")
 
         return {
             "monthlyIncome": profile.monthly_income,
@@ -58,6 +50,4 @@ async def update_profile(
         }
     except Exception as e:
         print(f"Error updating profile: {e}")
-        raise HTTPException(
-            status_code=500, detail="Internal server error while updating profile"
-        )
+        raise HTTPException(status_code=500, detail="Failed to update profile")
